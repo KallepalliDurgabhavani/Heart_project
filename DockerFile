@@ -1,0 +1,28 @@
+# Base image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Copy entire project
+COPY . .
+
+# Install backend dependencies
+WORKDIR /app/server
+RUN npm install
+
+# Install frontend dependencies and build
+WORKDIR /app/client
+RUN npm install
+RUN npm run build
+
+# Move frontend build into server/public
+RUN mkdir -p /app/server/public
+RUN cp -r build/* /app/server/public/
+
+# Go to backend and expose backend port
+WORKDIR /app/server
+EXPOSE 5000
+
+# Start backend server
+CMD ["node", "index.js"]
