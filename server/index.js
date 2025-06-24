@@ -9,6 +9,18 @@ app.use(express.json());
 app.use(cors());
 
 mongoose.connect("mongodb://127.0.0.1:27017/Health");
+// connect to deploy
+
+const path = require('path');
+
+// Serve static files from React
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Fallback for React routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 
 // User schema
 const userSchema = new mongoose.Schema({
